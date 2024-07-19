@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalnia+Glaze:wght@100..700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEEKSHA'S MINI IP PROJECT</title>
+    <style>
+        body {
+            font-family: 'Hind', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #5757a7;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            font-family: 'Kalnia Glaze', sans-serif;
+            color: #9931b8;
+        }
+        input[type="file"], input[type="range"], button {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: calc(100% - 22px);
+            max-width: 400px;
+        }
+        input[type="file"] {
+            padding: 5px;
+        }
+        button {
+            background: #cf21b5;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        #stylized-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            display: none;
+            border-radius: 10px;
+        }
+        .download-btn {
+            display: none;
+            background: #4caf81;
+            color: white;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .download-btn:hover {
+            background: #45a049;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .slider-container input {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img style="width: 100px;" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDlpcHN1N3oweWE1dDltOGwyMXE4c3lrdW50bTd1dXc0YjhkbWdwNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xULW8pzsIqyiP8UgVi/giphy.webp">
+        <h1>✨WHIMSIFY✨</h1>
+        <center><p>Add a touch of whimsy to your world, one photo at a time.🎨
+        </p></center>
+        <form id="upload-form">
+            <input type="file" id="content-image" name="content_image" accept="image/*" required><br>
+            <input type="file" id="style-image" name="style_image" accept="image/*" required><br>
+            <div class="slider-container">
+                <label for="style-percentage">Style Percentage:</label>
+                <input type="range" id="style-percentage" name="style_percentage" min="0" max="1" step="0.01" value="0.5">
+                <span id="percentage-value">0.50</span>
+            </div>
+            <button type="submit">Upload and Stylize🎉</button>
+            <center><p>🌟Made by Deeksha🌟</p></center>
+        </form>
+        <div id="result">
+            <img id="stylized-image" src="" alt="Stylized Image">
+            <a id="download-btn" class="download-btn" href="#" download="stylized_image.jpeg">Download Image💾</a>
+        </div>
+    </div>
+
+    <script>
+        const stylePercentageInput = document.getElementById('style-percentage');
+        const percentageValue = document.getElementById('percentage-value');
+
+        stylePercentageInput.addEventListener('input', function() {
+            percentageValue.textContent = stylePercentageInput.value;
+        });
+
+        document.getElementById('upload-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('content_image', document.getElementById('content-image').files[0]);
+            formData.append('style_image', document.getElementById('style-image').files[0]);
+            formData.append('style_percentage', document.getElementById('style-percentage').value);
+
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const stylizedImage = document.getElementById('stylized-image');
+                stylizedImage.src = url;
+                stylizedImage.style.display = 'block';
+
+                const downloadBtn = document.getElementById('download-btn');
+                downloadBtn.href = url;
+                downloadBtn.style.display = 'inline-block';
+            } else {
+                alert('Failed to upload and stylize image');
+            }
+        });
+    </script>
+</body>
+</html>
