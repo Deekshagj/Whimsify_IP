@@ -1,0 +1,1 @@
+Whimsify is a web application that applies artistic style transfer to your photos, allowing you to create visually stunning and unique images with ease. This project leverages advanced style transfer techniques to transform your photos into works of art.
